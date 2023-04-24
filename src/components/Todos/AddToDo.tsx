@@ -1,16 +1,23 @@
+import React from 'react';
 import { Box, Button, TextField } from '@mui/material';
-import React, { useCallback, useState } from 'react';
 
-const AddToDo = () => {
-  const [tempToDo, setTempToDo] = useState<string>('');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTempToDo(e.target.value);
+const AddToDo = ({
+  tempToDo,
+  handleChange,
+  handleAddToDo,
+}: {
+  tempToDo: string;
+  handleChange: Function;
+  handleAddToDo: Function;
+}) => {
+  const onAddBtnClick = () => {
+    if (tempToDo.trim().length === 0) return;
+    handleAddToDo();
   };
 
-  const handleAddToDo = useCallback(() => {
-    if (tempToDo.trim().length === 0) return;
-  }, [tempToDo]);
+  const onchange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange(e.target.value);
+  };
 
   return (
     <Box
@@ -19,9 +26,9 @@ const AddToDo = () => {
         marginBottom: '20px',
       }}
     >
-      <TextField onChange={handleChange} value={tempToDo} fullWidth />
+      <TextField onChange={onchange} value={tempToDo} fullWidth />
       <Button
-        onClick={handleAddToDo}
+        onClick={onAddBtnClick}
         sx={{
           minWidth: '100px',
         }}

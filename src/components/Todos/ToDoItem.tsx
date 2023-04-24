@@ -1,11 +1,48 @@
-import React from 'react';
-import { ITodo } from './index';
-import { IconButton, ListItem, ListItemText } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useState } from 'react';
+import EditToDo from './EditToDo';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Reference, StoreObject } from '@apollo/client';
+import { IconButton, ListItem, ListItemText } from '@mui/material';
+import { Todo, useDeleteTodoMutation } from '../../generated/graphql';
 
-const ToDoItem = ({ todo }: { todo: ITodo }) => {
-  return (
+const ToDoItem = ({ todo }: { todo: Todo }) => {
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+
+  const [destroyToDo] = useDeleteTodoMutation({
+    update(cache, { data }) {
+      cache.modify({
+        fields: {
+          todos(existingTodos, { readField }) {
+            return existingTodos.filter(
+              (todoRef: Reference | StoreObject | undefined) =>
+                data?.deleteTodo !== readField('id', todoRef)
+            );
+          },
+        },
+      });
+    },
+  });
+
+  const handleDelete = () => {
+    destroyToDo({
+      variables: {
+        id: todo.id,
+      },
+    });
+  };
+
+  const openEditMode = () => {
+    setIsEditMode(true);
+  };
+
+  const closeEditMode = () => {
+    setIsEditMode(false);
+  };
+
+  return isEditMode ? (
+    <EditToDo closeEditMode={closeEditMode} editableTodo={todo} />
+  ) : (
     <ListItem
       sx={{
         border: '1px solid #000',
@@ -18,10 +55,15 @@ const ToDoItem = ({ todo }: { todo: ITodo }) => {
       }}
       secondaryAction={
         <>
-          <IconButton sx={{ marginRight: '10px' }} edge='end' aria-label='edit'>
+          <IconButton
+            onClick={openEditMode}
+            sx={{ marginRight: '10px' }}
+            edge='end'
+            aria-label='edit'
+          >
             <EditIcon />
           </IconButton>
-          <IconButton edge='end' aria-label='delete'>
+          <IconButton onClick={handleDelete} edge='end' aria-label='delete'>
             <DeleteIcon />
           </IconButton>
         </>

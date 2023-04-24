@@ -30,7 +30,7 @@ const Todos = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [todos]);
+  }, [todos, client]);
 
   useEffect(() => {
     if (!data?.todos) return;

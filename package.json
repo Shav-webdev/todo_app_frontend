@@ -32,7 +32,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev:start": "react-scripts start",
+    "prod:start": "react-scripts start",
     "codegen": "graphql-codegen --config codegen.yml",
     "build": "react-scripts build",
     "test": "react-scripts test",

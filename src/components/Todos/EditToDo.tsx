@@ -15,7 +15,7 @@ const EditToDo = ({
     editableTodo.title || ''
   );
 
-  const [editToDo, {client, data: editableData}] = useUpdateTodoMutation({
+  const [editToDo] = useUpdateTodoMutation({
     optimisticResponse: {
       updateTodo: {
         __typename: 'Todo',

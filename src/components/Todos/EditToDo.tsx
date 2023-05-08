@@ -15,14 +15,15 @@ const EditToDo = ({
     editableTodo.title || ''
   );
 
-  const [editToDo] = useUpdateTodoMutation({
-    update: (cache, { data }) => {
-      cache.modify({
-        fields: {
-          title: () => data?.updateTodo.title,
-        },
-      });
-    },
+  const [editToDo, {client, data: editableData}] = useUpdateTodoMutation({
+    optimisticResponse: {
+      updateTodo: {
+        __typename: 'Todo',
+        id: editableTodo.id,
+        title: updatedTodo,
+        dueDate: `${new Date().toISOString()}`
+      }
+    }
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,6 +43,7 @@ const EditToDo = ({
     }).then((res) => {
       closeEditMode();
     });
+    closeEditMode();
   }, [editToDo, updatedTodo, editableTodo.id, closeEditMode]);
 
   return (

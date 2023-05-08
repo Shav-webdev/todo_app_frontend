@@ -14,8 +14,6 @@ import reportWebVitals from './reportWebVitals';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 
-console.log({ config });
-
 const wsLink: GraphQLWsLink = new GraphQLWsLink(
   createClient({
     url: config.WS_API_URL!,

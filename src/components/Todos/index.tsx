@@ -56,6 +56,14 @@ const Todos = () => {
         },
       });
     },
+    optimisticResponse: {
+      createTodo: {
+        __typename: "Todo",
+        title: tempToDo,
+        dueDate: `${new Date().toISOString()}`,
+        id: String(new Date().getTime()),
+      }
+    }
   });
 
   const handleChange = (todo: string) => {
@@ -68,8 +76,8 @@ const Todos = () => {
         title: tempToDo,
       },
     }).then((res) => {
-      setTempToDo('');
     });
+    setTempToDo('');
   }, [addToDo, tempToDo]);
 
   return (

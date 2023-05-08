@@ -22,6 +22,9 @@ const ToDoItem = ({ todo }: { todo: Todo }) => {
         },
       });
     },
+    optimisticResponse: {
+      deleteTodo: todo.id,
+    },
   });
 
   const handleDelete = () => {
